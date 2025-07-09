@@ -1,57 +1,3 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <header class="navbar">
-        <div class="logo">dlz | <span class="Be">Be</span></div>
-        <nav class="nav-links">
-            <a href="#"><span style="font-family: 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;">🏠</span> Home</a>
-            <a href="#"><span style="font-family: 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;">📰</span> Your News</a>
-            <a href="#"><span style="font-family: 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;">🔍</span> Discover</a>
-            <a href="#"><span style="font-family: 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;">🎓</span> Training</a>
-            <a href="#"><span style="font-family: 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;">📄</span> Report Card</a>
-            <a href="#"><span style="font-family: 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;">☰</span> More &#9662;</a>
-        </nav>
-        <div class="profile-icon">JK &#9662;</div>
-    </header>
-
-    <main class="dashboard">
-        <section class="greeting-section">
-            <h1>Good morning, Jai Kashyap!</h1>
-            <p>You can earn up to 285 reward points today.</p>
-
-            <div class="reward-info">
-                <div class="info-box">200<br><span>Current Reward Points</span></div>
-                <div class="info-box">200<br><span>All Time Reward Points</span></div>
-                <div class="info-box">0<br><span>Training Sessions (30 Days)</span></div>
-                <div class="info-box">0<br><span>Correct Answer Streak</span></div>
-            </div>
-        </section>
-
-        <section class="quick-links">
-            <div class="quick-link">Become</div>
-            <div class="quick-link">Events</div>
-        </section>
-
-        <section class="activities">
-            <h2>Today's Activities</h2>
-            <div class="activity-card">
-                <h3>Ethics and Compliance Training</h3>
-                <p>7 of 8 items completed</p>
-            </div>
-            <div class="activity-card">
-                <h3>The Business We Do</h3>
-                <p>25 Reward Points • 1 Video</p>
-            </div>
-        </section>
-    </main>
-</body>
-</html> -->
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -60,26 +6,67 @@
     <title>Dashboard</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
+  <script>
+  function toggleCalendar() {
+    const popup = document.getElementById("calendar-popup");
+    popup.classList.toggle("hidden");
+  }
+</script>
+
+  <script>
+    function toggleNotifications() {
+      document.getElementById("notification-panel").classList.toggle("hidden");
+      document.getElementById("profile-menu").classList.add("hidden");
+    }
+
+    function toggleProfileMenu() {
+      document.getElementById("profile-menu").classList.toggle("hidden");
+      document.getElementById("notification-panel").classList.add("hidden");
+    }
+
+    // Close dropdowns when clicking outside
+    window.addEventListener("click", function (e) {
+      if (!e.target.closest(".notification-wrapper")) {
+        document.getElementById("notification-panel").classList.add("hidden");
+      }
+      if (!e.target.closest(".profile-wrapper")) {
+        document.getElementById("profile-menu").classList.add("hidden");
+      }
+    });
+  </script>
+
   <body>
     <header class="navbar">
       <div class="logo">dlz | <span class="Be">Be</span></div>
       <nav class="nav-links">
-        <a href="#">🏠 Home</a>
-        <a href="#">📰 Your News</a>
+        <a href="index.html">🏠 Home</a>
+        <a href="news/news.html">📰 Your News</a>
         <a href="#">🔍 Discover</a>
         <a href="#">🎓 Training</a>
         <a href="#">📄 Report Card</a>
-        <a href="#">☰ More ▼</a>
       </nav>
       <div class="nav-icons">
-        <span class="notification">🔔</span>
-        <div class="profile-icon">JK ▼</div>
+        <div class="notification-wrapper">
+          <span class="notification" onclick="toggleNotifications()">🔔</span>
+          <div id="notification-panel" class="dropdown hidden">
+            <p>No new notifications</p>
+          </div>
+        </div>
+
+        <div class="profile-wrapper">
+          <div class="profile-icon" onclick="toggleProfileMenu()">JK ▼</div>
+          <div id="profile-menu" class="dropdown hidden">
+            <a href="#">View Profile</a>
+            <a href="#">Settings</a>
+            <a href="#" onclick="logout()">Logout</a>
+          </div>
+        </div>
       </div>
     </header>
 
     <main class="dashboard">
       <section class="greeting-section">
-        <h1>Good morning, Jai Kashyap!</h1>
+        <h1 id="greeting">Good morning!</h1>
         <p>You can earn up to 285 reward points today.</p>
 
         <div class="reward-info">
@@ -87,7 +74,7 @@
             200<br /><span>Current Reward Points</span>
           </div>
           <div class="info-box">
-            200<br /><span>All Time Reward Points</span>
+            750<br /><span>All Time Reward Points</span>
           </div>
           <div class="info-box">
             0<br /><span>Training Sessions (30 Days)</span>
@@ -98,7 +85,7 @@
 
       <section class="quick-links">
         <div class="quick-link">🚀 Become</div>
-        <div class="quick-link">📅 Events</div>
+        <div class="quick-link" onclick="toggleCalendar()">📅 Events</div>
       </section>
 
       <section class="activities">
@@ -113,21 +100,27 @@
             <button class="start-btn">Start Topic</button>
           </a>
         </div>
+
         <div class="activity-card">
           <div>
             <h3>The Heart of Hospitality</h3>
             <p>0 of 5 items completed</p>
           </div>
-          <a href="topicpage/topic.html?topic=The%Heart%Of%Hospitality"></a>
-          <button class="start-btn">Start Topic</button>
+          <a href="topicpage/topic.html?topic=The%Heart%Of%Hospitality">
+            <button class="start-btn">Start Topic</button>
+          </a>
         </div>
+
         <div class="activity-card">
           <div>
-            <h3>Ethics and Compliance Training</h3>
-            <p>7 of 8 items completed</p>
+            <h3>Authentic Interactions with Guests</h3>
+            <p>0 of 5 items completed</p>
           </div>
-          <button class="start-btn">Start Topic</button>
+          <a href="topicpage/topic.html?topic=Authentic%20interactions%20With%20Guests">
+            <button class="start-btn">Start Topic</button>
+          </a>
         </div>
+
         <div class="activity-card">
           <div>
             <h3>The Business We Do</h3>
@@ -139,5 +132,46 @@
     </main>
 
     <div class="help-tab">Need Help</div>
+    <script>
+  const user = localStorage.getItem("user");
+
+  if (!user) {
+    window.location.href = "login.html";
+  } else {
+    // Update profile icon
+    document.querySelector(".profile-icon").textContent = user.split(" ").map(n => n[0]).join("").toUpperCase() + " ▼";
+
+    // Update greeting
+    const greetingEl = document.getElementById("greeting");
+    const hour = new Date().getHours();
+    let timeOfDay = "Hello";
+
+    if (hour < 12) timeOfDay = "Good morning";
+    else if (hour < 18) timeOfDay = "Good afternoon";
+    else timeOfDay = "Good evening";
+
+    greetingEl.textContent = `${timeOfDay}, ${user}!`;
+  }
+
+  function logout() {
+    localStorage.removeItem("user");
+    window.location.href = "login.html";
+  }
+</script>
+
+    </script>
+    <div id="calendar-popup" class="calendar hidden">
+  <div class="calendar-header">
+    <h2>📅 July 2025</h2>
+    <span onclick="toggleCalendar()" class="close-btn">✖</span>
+  </div>
+  <ul class="event-list">
+    <li><strong>July 10:</strong> Marriott Leadership Summit</li>
+    <li><strong>July 15:</strong> New Property Launch - Dubai</li>
+    <li><strong>July 20:</strong> Sustainability Webinar</li>
+    <li><strong>July 25:</strong> Employee Recognition Day</li>
+  </ul>
+</div>
+
   </body>
 </html>

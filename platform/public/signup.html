@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Create Account</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="login-container">
+    <h1>Create Your Account</h1>
+    <form id="signup-form">
+      <input type="text" id="new-username" placeholder="Your name" required />
+      <input type="password" id="new-password" placeholder="Create a password" required />
+      <button type="submit">Sign Up</button>
+      <p id="signup-error" style="color: red; display: none;">User already exists.</p>
+    </form>
+    <p>Already have an account? <a href="login.html">Login here</a></p>
+  </main>
+
+  <script>
+    document.getElementById("signup-form").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const username = document.getElementById("new-username").value.trim();
+      const password = document.getElementById("new-password").value;
+
+      const users = JSON.parse(localStorage.getItem("users") || "{}");
+      console.log(users)
+      if (users[username]) {
+        document.getElementById("signup-error").style.display = "block";
+      } else {
+        users[username] = password;
+        localStorage.setItem("users", JSON.stringify(users));
+        localStorage.setItem("user", username);
+        window.location.href = "index.html";
+      }
+    });
+  </script>
+</body>
+</html>

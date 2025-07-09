@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="login-container">
+  <h1>Login to Your Account</h1>
+  <form id="login-form">
+    <input type="text" id="username" placeholder="Enter your name" required />
+    <input type="password" id="password" placeholder="Enter your password" required />
+    <button type="submit">Login</button>
+    <p id="login-error" style="color: red; display: none;">Invalid credentials. Please try again.</p>
+  </form>
+  <p>Don't have an account? <a href="signup.html">Create one</a></p>
+
+</main>
+
+
+  <script>
+  document.getElementById("login-form").addEventListener("submit", function(e) {
+    e.preventDefault();
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value;
+
+    const users = JSON.parse(localStorage.getItem("users") || "{}");
+
+    if (users[username] && users[username] === password) {
+      localStorage.setItem("user", username);
+      window.location.href = "index.html";
+    } else {
+      document.getElementById("login-error").style.display = "block";
+    }
+  });
+</script>
+
+</script>
+
+  </script>
+</body>
+</html>
