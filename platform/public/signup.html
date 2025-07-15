@@ -10,6 +10,7 @@
   <main class="login-container">
     <h1>Create Your Account</h1>
     <form id="signup-form">
+      <input type="text" id="new-email" placeholder="Your email" required />
       <input type="text" id="new-username" placeholder="Your name" required />
       <input type="password" id="new-password" placeholder="Create a password" required />
       <button type="submit">Sign Up</button>
@@ -19,22 +20,31 @@
   </main>
 
   <script>
-    document.getElementById("signup-form").addEventListener("submit", function(e) {
-      e.preventDefault();
-      const username = document.getElementById("new-username").value.trim();
-      const password = document.getElementById("new-password").value;
+document.getElementById("signup-form").addEventListener("submit", async function(e) {
+  e.preventDefault();
+  const name = document.getElementById("new-username").value.trim();
+  const email = document.getElementById("new-email").value.trim();
+  const password = document.getElementById("new-password").value;
 
-      const users = JSON.parse(localStorage.getItem("users") || "{}");
-      console.log(users)
-      if (users[username]) {
-        document.getElementById("signup-error").style.display = "block";
-      } else {
-        users[username] = password;
-        localStorage.setItem("users", JSON.stringify(users));
-        localStorage.setItem("user", username);
-        window.location.href = "index.html";
-      }
+  try {
+    const res = await fetch("/api/signup", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, email, password }),
     });
-  </script>
+
+    if (res.ok) {
+      const data = await res.json();
+      sessionStorage.setItem("userId", data.userId);
+      sessionStorage.setItem("user", data.name);
+      window.location.href = "index.html";
+    } else {
+      document.getElementById("signup-error").style.display = "block";
+    }
+  } catch (err) {
+    console.error("Signup failed", err);
+  }
+});
+</script>
 </body>
 </html>

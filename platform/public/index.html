@@ -133,7 +133,7 @@
 
     <div class="help-tab">Need Help</div>
     <script>
-  const user = localStorage.getItem("user");
+  const user = sessionStorage.getItem("user");
 
   if (!user) {
     window.location.href = "login.html";
