@@ -1,4 +1,8 @@
+
+let topicStartTime;
+
 document.addEventListener("DOMContentLoaded", () => {
+  topicStartTime = Date.now();
   const params = new URLSearchParams(window.location.search);
   const topic = params.get("topic");
 
@@ -16,8 +20,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function fetchContent(topic) {
     try {
+      const userId = sessionStorage.getItem("userId")
       const response = await fetch(
-        `/generate-content?topic=${encodeURIComponent(topic)}`
+        `/generate-content?topic=${encodeURIComponent(topic)}&userId=${encodeURIComponent(userId)}`
       );
       const data = await response.json();
       if (data.content) {
@@ -43,7 +48,18 @@ document.addEventListener("DOMContentLoaded", () => {
       loadingEl.style.display = "none";
     }
   }
-  document.getElementById("take-quiz-btn").addEventListener("click", () => {
+  document.getElementById("take-quiz-btn").addEventListener("click", async () => {
+    const durationSec = Math.round((Date.now() - topicStartTime) / 1000);
+    await fetch("/log-time", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({
+        userId: sessionStorage.getItem("userId"),
+        quizId: sessionStorage.getItem("quizId"),
+        type: "topic",
+        durationSec
+      })
+    });
     window.location.href = "quiz/quiz.html";
   });
 });

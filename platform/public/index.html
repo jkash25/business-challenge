@@ -36,34 +36,7 @@
   </script>
 
   <body>
-    <header class="navbar">
-      <div class="logo">dlz | <span class="Be">Be</span></div>
-      <nav class="nav-links">
-        <a href="index.html">🏠 Home</a>
-        <a href="news/news.html">📰 Your News</a>
-        <a href="#">🔍 Discover</a>
-        <a href="#">🎓 Training</a>
-        <a href="#">📄 Report Card</a>
-      </nav>
-      <div class="nav-icons">
-        <div class="notification-wrapper">
-          <span class="notification" onclick="toggleNotifications()">🔔</span>
-          <div id="notification-panel" class="dropdown hidden">
-            <p>No new notifications</p>
-          </div>
-        </div>
-
-        <div class="profile-wrapper">
-          <div class="profile-icon" onclick="toggleProfileMenu()">JK ▼</div>
-          <div id="profile-menu" class="dropdown hidden">
-            <a href="#">View Profile</a>
-            <a href="#">Settings</a>
-            <a href="#" onclick="logout()">Logout</a>
-          </div>
-        </div>
-      </div>
-    </header>
-
+    <script src="navbar.js"></script>
     <main class="dashboard">
       <section class="greeting-section">
         <h1 id="greeting">Good morning!</h1>
@@ -106,7 +79,7 @@
             <h3>The Heart of Hospitality</h3>
             <p>0 of 5 items completed</p>
           </div>
-          <a href="topicpage/topic.html?topic=The%Heart%Of%Hospitality">
+          <a href="topicpage/topic.html?topic=The%20Heart%20Of%20Hospitality">
             <button class="start-btn">Start Topic</button>
           </a>
         </div>

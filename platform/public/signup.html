@@ -37,7 +37,7 @@ document.getElementById("signup-form").addEventListener("submit", async function
       const data = await res.json();
       sessionStorage.setItem("userId", data.userId);
       sessionStorage.setItem("user", data.name);
-      window.location.href = "index.html";
+      window.location.href = "profile.html";
     } else {
       document.getElementById("signup-error").style.display = "block";
     }

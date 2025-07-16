@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Your Profile</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f6f8;
+      margin: 0;
+      padding: 0;
+    }
+
+    .profile-container {
+      max-width: 500px;
+      margin: 60px auto;
+      background-color: #fff;
+      padding: 30px 40px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center333;
+    }
+
+    label {
+      display: block;
+      margin-top: 20px;
+      font-weight: 600;
+      color: #444;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 8px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+
+    button {
+      margin-top: 30px;
+      width: 100%;
+      padding: 12px;
+      background-color: #0078d4;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #005fa3;
+    }
+
+    .back-button {
+      margin-top: 15px;
+      background-color: #e0e0e0;
+      color: #333;
+    }
+
+    .back-button:hover {
+      background-color: #c6c6c6;
+    }
+  </style>
+</head>
+<body>
+  <div class="profile-container">
+    <h1 id="profile-heading">Your Profile</h1>
+    <form id="profile-form">
+      <label for="role">Your Role</label>
+      <input type="text" id="role" placeholder="e.g. Front Desk, Housekeeping" required />
+
+      <label for="experience">Years of Experience</label>
+      <input type="number" id="experience" min="0" placeholder="e.g. 3" required />
+
+      <label for="brand">Marriott Brand</label>
+      <input type="text" id="brand" placeholder="e.g. Courtyard, Ritz-Carlton" required />
+
+      <button type="submit">Save Profile</button>
+    </form>
+    <button class="back-button" onclick="goBack()">← Back to Dashboard</button>
+  </div>
+
+  <script>
+    const userId = sessionStorage.getItem("userId");
+
+    async function loadProfile() {
+      try {
+        const res = await fetch(`/api/profile?userId=${userId}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (data.role || data.experience || data.brand) {
+            document.getElementById("profile-heading").textContent = "Update Your Profile";
+            document.getElementById("role").value = data.role || "";
+            document.getElementById("experience").value = data.experience || "";
+            document.getElementById("brand").value = data.brand || "";
+          } else {
+            document.getElementById("profile-heading").textContent = "Complete Your Profile";
+          }
+        }
+      } catch (err) {
+        console.error("Failed to load profile", err);
+      }
+    }
+
+    document.getElementById("profile-form").addEventListener("submit", async function(e) {
+      e.preventDefault();
+      const role = document.getElementById("role").value;
+      const experience = document.getElementById("experience").value;
+      const brand = document.getElementById("brand").value;
+
+      try {
+        const res = await fetch("/api/profile", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ userId, role, experience, brand }),
+        });
+
+        if (res.ok) {
+          alert("Profile saved successfully!");
+          window.location.href = "index.html";
+        } else {
+          alert("Failed to save profile.");
+        }
+      } catch (err) {
+        console.error("Profile save failed", err);
+        alert("An error occurred while saving your profile.");
+      }
+    });
+
+    function goBack() {
+      window.location.href = "index.html";
+    }
+
+    loadProfile();
+  </script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+/* === NAVBAR STYLES === */
+
+.navbar {
+    background-color: #000;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    flex-wrap: wrap;
+}
+
+.logo {
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.Be {
+    color: orange;
+    font-family: cursive, "Comic Sans MS", "Brush Script MT", sans-serif;
+}
+
+.nav-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+}
+
+.nav-icons {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.notification-wrapper,
+.profile-wrapper {
+    position: relative;
+}
+
+.notification {
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.profile-icon {
+    background-color: black;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+/* Dropdown Menu */
+.dropdown {
+    position: absolute;
+    top: 60px;
+    right: 2rem;
+    background-color: white;
+    color: black;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    padding: 1rem;
+    z-index: 1000;
+    min-width: 180px;
+}
+
+.dropdown a {
+    display: block;
+    padding: 0.5rem 0;
+    color: #333;
+    text-decoration: none;
+}
+
+.dropdown a:hover {
+    background-color: #f0f0f0;
+}
+
+.hidden {
+    display: none;
+}

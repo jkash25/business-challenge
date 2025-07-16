@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,9 +7,16 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div id="quiz-container"></div>
-  <button onclick="submitQuiz()">Submit</button>
-  <div id="result"></div>
+  <!-- Navbar will be injected here -->
+   <script src="../../navbar.js"></script>
+  <main class="dashboard">
+    <section class="quiz-section">
+      <div id="quiz-container"></div>
+      <button onclick="submitQuiz()">Submit</button>
+      <div id="result"></div>
+    </section>
+  </main>
+
   <script src="quiz.js"></script>
 </body>
 </html>

@@ -1,0 +1,27 @@
+<!-- navbar.html -->
+<header class="navbar">
+  <div class="logo">dlz | <span class="Be">Be</span></div>
+  <nav class="nav-links">
+    <a href="/index.html">🏠 Home</a>
+    <a href="/news/news.html">📰 Your News</a>
+    <a href="#">🔍 Discover</a>
+    <a href="#">🎓 Training</a>
+    <a href="#">📄 Report Card</a>
+  </nav>
+  <div class="nav-icons">
+    <div class="notification-wrapper">
+      <span class="notification" onclick="toggleNotifications()">🔔</span>
+      <div id="notification-panel" class="dropdown hidden">
+        <p>No new notifications</p>
+      </div>
+    </div>
+    <div class="profile-wrapper">
+      <div class="profile-icon" onclick="toggleProfileMenu()">JK ▼</div>
+      <div id="profile-menu" class="dropdown hidden">
+        <a href="/profile.html">View Profile</a>
+        <a href="#">Settings</a>
+        <a href="#" onclick="logout()">Logout</a>
+      </div>
+    </div>
+  </div>
+</header>

@@ -49,6 +49,7 @@
               const data = await res.json();
               sessionStorage.setItem("userId", data.userId);
               sessionStorage.setItem("user", data.name);
+              sessionStorage.setItem("is_admin", data.is_admin)
               console.log("Login response:", data);
               window.location.href = "index.html";
             } else {
