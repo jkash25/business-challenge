@@ -59,6 +59,7 @@ async function submitQuiz() {
   window.quizData.forEach((q, index) => {
     const selected = document.querySelector(`input[name="q${index}"]:checked`);
     if (selected && selected.value === q.answer) {
+      console.log("Selected:", selected.value, "Answer:", q.answer);
       score++;
     }
   });
@@ -82,6 +83,9 @@ async function submitQuiz() {
       "result"
     ).innerText = `✅ You scored ${score} out of ${window.quizData.length}`;
     document.querySelector("button").disabled = true;
+    setTimeout(() => {
+      window.location.href = "quizconfirmation.html";
+    }, 3000); // 3 seconds delay
   } else {
     document.getElementById(("result".innerText = `${message.message}`));
   }

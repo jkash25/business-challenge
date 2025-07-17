@@ -167,7 +167,6 @@ app.post("/api/login", async (req, res) => {
 });
 
 app.post("/submit-quiz", async (req, res) => {
-  window.location.href("/index.html")
   const { quizId, userId, score, total } = req.body;
   const logId = uuidv4();
   try {
