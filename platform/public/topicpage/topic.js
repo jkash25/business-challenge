@@ -5,13 +5,14 @@ document.addEventListener("DOMContentLoaded", () => {
   topicStartTime = Date.now();
   const params = new URLSearchParams(window.location.search);
   const topic = params.get("topic");
-
+``
   const titleEl = document.getElementById("topic-title");
   const contentEl = document.getElementById("topic-content");
   const loadingEl = document.getElementById("loading");
 
   if (topic) {
     titleEl.textContent = topic;
+    sessionStorage.setItem("topicTitle", topic);
     fetchContent(topic);
   } else {
     titleEl.textContent = "No topic provided.";

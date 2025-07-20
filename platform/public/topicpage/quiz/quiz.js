@@ -83,6 +83,12 @@ async function submitQuiz() {
       "result"
     ).innerText = `✅ You scored ${score} out of ${window.quizData.length}`;
     document.querySelector("button").disabled = true;
+    const topic = sessionStorage.getItem("topicTitle");
+    if (topic) {
+      let completed = JSON.parse(localStorage.getItem("completedActivities") || "{}");
+      completed[topic] = true;
+      localStorage.setItem("completedActivities", JSON.stringify(completed));
+    }
     setTimeout(() => {
       window.location.href = "quizconfirmation.html";
     }, 3000); // 3 seconds delay

@@ -62,6 +62,12 @@
       </section>
 
       <section class="activities">
+        <div class="overall-progress">
+          <div class="progress-label">Overall Progress</div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: 0%"></div>
+          </div>
+        </div>
         <h2>Today's Activities</h2>
 
         <div class="activity-card">
@@ -125,7 +131,23 @@
 
     greetingEl.textContent = `${timeOfDay}, ${user}!`;
   }
+   const completed = JSON.parse(localStorage.getItem("completedActivities") || "{}");
+      const cards = document.querySelectorAll(".activity-card");
+      let completedCount = 0;
 
+      cards.forEach((card) => {
+        const title = card.querySelector("h3").textContent.trim();
+        if (completed[title]) {
+          completedCount++;
+          const status = document.createElement("p");
+          status.textContent = "✅ Completed";
+          status.style.color = "green";
+          card.appendChild(status);
+        }
+      });
+
+      const percent = (completedCount / cards.length) * 100;
+      document.querySelector(".progress-fill").style.width = `${percent}%`;
   function logout() {
     localStorage.removeItem("user");
     window.location.href = "login.html";
