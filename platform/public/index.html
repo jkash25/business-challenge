@@ -36,6 +36,7 @@
   </script>
 
   <body>
+    
     <script src="navbar.js"></script>
     <main class="dashboard">
       <section class="greeting-section">
@@ -118,7 +119,10 @@
     window.location.href = "login.html";
   } else {
     // Update profile icon
-    document.querySelector(".profile-icon").textContent = user.split(" ").map(n => n[0]).join("").toUpperCase() + " ▼";
+    const profileIcon = document.querySelector(".profile-icon");
+    if (profileIcon) {
+      profileIcon.textContent = user.split(" ").map((n) => n[0]).join("").toUpperCase() + " ▼";
+    }
 
     // Update greeting
     const greetingEl = document.getElementById("greeting");
@@ -137,6 +141,8 @@
 
       cards.forEach((card) => {
         const title = card.querySelector("h3").textContent.trim();
+        console.log("current card title: ", title);
+        console.log("comparing against stored keys: ", Object.keys(completed));
         if (completed[title]) {
           completedCount++;
           const status = document.createElement("p");

@@ -84,6 +84,8 @@ async function submitQuiz() {
     ).innerText = `✅ You scored ${score} out of ${window.quizData.length}`;
     document.querySelector("button").disabled = true;
     const topic = sessionStorage.getItem("topicTitle");
+    console.log("Marking activity as completed for topic:", topic);
+    console.log("Before saving:, ", localStorage.getItem("completedActivities"));
     if (topic) {
       let completed = JSON.parse(localStorage.getItem("completedActivities") || "{}");
       completed[topic] = true;
@@ -91,7 +93,7 @@ async function submitQuiz() {
     }
     setTimeout(() => {
       window.location.href = "quizconfirmation.html";
-    }, 3000); // 3 seconds delay
+    }, 200000); // 3 seconds delay
   } else {
     document.getElementById(("result".innerText = `${message.message}`));
   }
