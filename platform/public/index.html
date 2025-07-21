@@ -145,22 +145,38 @@
         console.log("comparing against stored keys: ", Object.keys(completed));
         if (completed[title]) {
           completedCount++;
-          const status = document.createElement("div");
+
+          // 🎯 Create a container for title and status
+          const headerContainer = document.createElement("div");
+          headerContainer.style.textAlign = "center";
+          headerContainer.style.marginBottom = "12px";
+
+          // ✅ Completed label
+          const status = document.createElement("p");
           status.textContent = "✅ Completed";
           status.style.color = "green";
           status.style.fontWeight = "bold";
-          status.style.marginBottom = "8px";
-          card.insertBefore(status, card.firstChild);
+          status.style.margin = "4px 0";
 
+          // 🏷️ Move title into container
+          const titleEl = card.querySelector("h3");
+          if (titleEl) {
+            headerContainer.appendChild(status);
+            headerContainer.appendChild(titleEl);
+            card.insertBefore(headerContainer, card.firstChild);
+          }
+
+          // 🔁 Update button for review
           const button = card.querySelector("button");
           if (button) {
             button.textContent = "Review Material";
             button.style.backgroundColor = "#f0f0f0";
             button.style.color = "#333";
             button.style.border = "1px solid #ccc";
-            button.style.marginTop = "auto"; 
+            button.style.marginTop = "auto";
           }
         }
+
       });
 
       const percent = (completedCount / cards.length) * 100;
