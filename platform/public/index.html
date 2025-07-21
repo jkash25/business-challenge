@@ -146,27 +146,13 @@
         if (completed[title]) {
           completedCount++;
 
-          // 🎯 Create a container for title and status
           const headerContainer = document.createElement("div");
           headerContainer.style.textAlign = "center";
           headerContainer.style.marginBottom = "12px";
 
-          // ✅ Completed label
-          const status = document.createElement("p");
+          const status = document.createElement("span");
           status.textContent = "✅ Completed";
-          status.style.color = "green";
-          status.style.fontWeight = "bold";
-          status.style.margin = "4px 0";
-
-          // 🏷️ Move title into container
-          const titleEl = card.querySelector("h3");
-          if (titleEl) {
-            headerContainer.appendChild(status);
-            headerContainer.appendChild(titleEl);
-            card.insertBefore(headerContainer, card.firstChild);
-          }
-
-          // 🔁 Update button for review
+          status.className = "completed-label";
           const button = card.querySelector("button");
           if (button) {
             button.textContent = "Review Material";
@@ -174,7 +160,13 @@
             button.style.color = "#333";
             button.style.border = "1px solid #ccc";
             button.style.marginTop = "auto";
+            const actionContainer = document.createElement("div");
+            actionContainer.className = "activity-actions";
+            actionContainer.appendChild(status);
+            actionContainer.appendChild(button.cloneNode(true)); // clone to preserve button
+            button.replaceWith(actionContainer);
           }
+
         }
 
       });
