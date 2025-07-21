@@ -145,22 +145,30 @@
         console.log("comparing against stored keys: ", Object.keys(completed));
         if (completed[title]) {
           completedCount++;
-          const status = document.createElement("div");
-          status.textContent = "✅ Completed";
-          status.style.color = "green";
-          status.style.fontWeight = "bold";
-          status.style.marginBottom = "8px";
-          card.insertBefore(status, card.firstChild);
 
+          const headerContainer = document.createElement("div");
+          headerContainer.style.textAlign = "center";
+          headerContainer.style.marginBottom = "12px";
+
+          const status = document.createElement("span");
+          status.textContent = "✅ Completed";
+          status.className = "completed-label";
           const button = card.querySelector("button");
           if (button) {
             button.textContent = "Review Material";
             button.style.backgroundColor = "#f0f0f0";
             button.style.color = "#333";
             button.style.border = "1px solid #ccc";
-            button.style.marginTop = "auto"; 
+            button.style.marginTop = "auto";
+            const actionContainer = document.createElement("div");
+            actionContainer.className = "activity-actions";
+            actionContainer.appendChild(status);
+            actionContainer.appendChild(button.cloneNode(true)); // clone to preserve button
+            button.replaceWith(actionContainer);
           }
+
         }
+
       });
 
       const percent = (completedCount / cards.length) * 100;
