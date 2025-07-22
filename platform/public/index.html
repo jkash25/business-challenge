@@ -135,7 +135,8 @@
 
     greetingEl.textContent = `${timeOfDay}, ${user}!`;
   }
-   const completed = JSON.parse(localStorage.getItem("completedActivities") || "{}");
+      const completedKey = `completedActivities_${user}`;
+      const completed = JSON.parse(localStorage.getItem(completedKey) || "{}");
       const cards = document.querySelectorAll(".activity-card");
       let completedCount = 0;
 

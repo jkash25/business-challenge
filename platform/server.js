@@ -35,7 +35,8 @@ app.get(`/generate-content`, async (req, res) => {
   try {
     const prompt = `Generate a training module for Marriott hotel staff on the topic: "${topic}". 
     The person is in the role of ${role} with ${experience} years of experience and is working at a ${brand} Marriott hotel. 
-    Ensure that the content is tailored to the user personally based on their information.
+    Ensure that the content is tailored to the user personally based on their information. Focus on preparing staff for
+    unique, real, human interactions because right now most staff find the current training unhelpful in preparing them for authentic, guest-facing situations. 
     Include:
     - An introduction
     - key learning points

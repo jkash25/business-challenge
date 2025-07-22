@@ -87,13 +87,15 @@ async function submitQuiz() {
     console.log("Marking activity as completed for topic:", topic);
     console.log("Before saving:, ", localStorage.getItem("completedActivities"));
     if (topic) {
-      let completed = JSON.parse(localStorage.getItem("completedActivities") || "{}");
+      const user = sessionStorage.getItem("user");
+      const completedKey = `completedActivities_${user}`;
+      let completed = JSON.parse(localStorage.getItem(completedKey) || "{}");
       completed[topic] = true;
-      localStorage.setItem("completedActivities", JSON.stringify(completed));
+      localStorage.setItem(completedKey, JSON.stringify(completed));
     }
     setTimeout(() => {
       window.location.href = "quizconfirmation.html";
-    }, 200000); // 3 seconds delay
+    }, 3000); // 3 seconds delay
   } else {
     document.getElementById(("result".innerText = `${message.message}`));
   }
