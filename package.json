@@ -10,6 +10,7 @@
     "express": "^5.1.0",
     "fullcalendar": "^6.1.18",
     "openai": "^5.8.3",
+    "oracledb": "^6.9.0",
     "pg": "^8.16.3",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",

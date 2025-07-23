@@ -1,20 +1,21 @@
-const { Pool } = require("pg");
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-});
-const { v4: uuidv4 } = require("uuid"); 
+const oracledb = require('oracledb');
+require('dotenv').config();
 
-async function testQuery() {
+async function testOracleConnection() {
   try {
-    const id = uuidv4();
-    const res = await pool.query("INSERT INTO users (id, name, email) VALUES ($1, $2, $3) RETURNING *", [id, 'bobby', 'test@testing.com']);
-    console.log(" Query successful. Sample rows:");
-    console.table(res.rows);
+    const connection = await oracledb.getConnection({
+      user: process.env.ORACLE_USER,
+      password: process.env.ORACLE_PASSWORD,
+      connectString: process.env.ORACLE_CONNECT_STRING
+    });
+
+    const result = await connection.execute('SELECT name, marshacode FROM hotel fetch first 5 rows only');
+    console.log(result.rows);
+
+    await connection.close();
   } catch (err) {
-    console.error(" Query failed:", err);
-  } finally {
-    await pool.end();
+    console.error('Oracle query failed:', err);
   }
 }
 
-testQuery();
+testOracleConnection();

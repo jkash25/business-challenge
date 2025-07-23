@@ -12,6 +12,8 @@ const { Pool } = require("pg");
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
 });
+const oracledb = require("oracledb");
+oracledb.outFormat = oracledb.OUT_FORMAT_OBJECT;
 
 // In-memory cache
 const cache = {};
@@ -29,8 +31,22 @@ app.get(`/generate-content`, async (req, res) => {
     );
     return res.json({ content: cache[topic], quizId });
   }
-  const userProfile = await pool.query("SELECT role, experience, brand, learningstyle, shifttype, guestinteraction, techcomfort, certifications FROM users WHERE id = $1", [userId]);
-  const {role, experience, brand, location, locationType, shiftType, learningStyle, guestInteraction, techComfort, certifications} = userProfile.rows[0];
+  const userProfile = await pool.query(
+    "SELECT role, experience, brand, learningstyle, shifttype, guestinteraction, techcomfort, certifications FROM users WHERE id = $1",
+    [userId]
+  );
+  const {
+    role,
+    experience,
+    brand,
+    location,
+    locationType,
+    shiftType,
+    learningStyle,
+    guestInteraction,
+    techComfort,
+    certifications,
+  } = userProfile.rows[0];
 
   try {
     const prompt = `Generate a training module for Marriott hotel staff on the topic: "${topic}". 
@@ -161,7 +177,11 @@ app.post("/api/login", async (req, res) => {
       [logId, email, success]
     );
 
-    res.json({ userId, name: user.rows[0].name, isAdmin: user.rows[0].is_admin });
+    res.json({
+      userId,
+      name: user.rows[0].name,
+      isAdmin: user.rows[0].is_admin,
+    });
     console.log("Login successful for: ", email);
   } catch (err) {
     console.error("Login error:", err);
@@ -239,17 +259,75 @@ app.post("/log-time", async (req, res) => {
   }
 });
 
-app.post("/api/profile", async (req, res) => {
-  const { userId, role, experience, brand, location, locationType, learningStyle, shiftType, guestInteraction, techComfort, certifications} = req.body;
+app.get("/api/profile", async (req, res) => {
+  const { userId } = req.query;
+  if (!userId) return res.status(400).json({ error: "Missing userId" });
 
-  if (!userId || !role || !experience || !brand || !location || !locationType) {
+  try {
+    const result = await pool.query(
+      `SELECT role, experience, brand, marshacode, location, locationtype,
+              learningstyle, shifttype, guestinteraction, techcomfort, certifications
+       FROM users WHERE id = $1`,
+      [userId]
+    );
+
+    if (result.rows.length === 0)
+      return res.status(404).json({ error: "User not found" });
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error("Error fetching profile:", err);
+    res.status(500).json({ error: "Failed to fetch profile" });
+  }
+});
+
+app.post("/api/profile", async (req, res) => {
+  const {
+    userId,
+    role,
+    experience,
+    brand,
+    marshaCode,
+    location,
+    locationType,
+    learningStyle,
+    shiftType,
+    guestInteraction,
+    techComfort,
+    certifications,
+  } = req.body;
+
+  if (
+    !userId ||
+    !role ||
+    !experience ||
+    !brand ||
+    !marshaCode ||
+    !location ||
+    !locationType
+  ) {
     return res.status(400).json({ error: "Missing profile information" });
   }
 
   try {
     await pool.query(
-      "UPDATE users SET role = $1, experience = $2, brand = $3, location = $4, locationtype=$5, learningstyle = $6, shifttype = $7, guestinteraction = $8, techcomfort = $9, certifications = $10 WHERE id = $11",
-      [role, experience, brand, location, locationType, learningStyle, shiftType, guestInteraction, techComfort, certifications, userId]
+      `UPDATE users SET
+        role = $1, experience = $2, brand = $3, marshacode = $4, location = $5, locationtype = $6,
+        learningstyle = $7, shifttype = $8, guestinteraction = $9, techcomfort = $10, certifications = $11
+      WHERE id = $12`,
+      [
+        role,
+        experience,
+        brand,
+        marshaCode,
+        location,
+        locationType,
+        learningStyle,
+        shiftType,
+        guestInteraction,
+        techComfort,
+        certifications,
+        userId,
+      ]
     );
     res.status(200).json({ message: "Profile updated successfully" });
   } catch (err) {
@@ -258,27 +336,25 @@ app.post("/api/profile", async (req, res) => {
   }
 });
 
-app.get("/api/profile", async (req, res) => {
-  const { userId } = req.query;
-
-  if (!userId) {
-    return res.status(400).json({ error: "Missing userId" });
-  }
-
+app.get("/api/hotels", async (req, res) => {
+  let connection;
   try {
-    const result = await pool.query(
-      "SELECT role, experience, brand, location, locationtype, learningstyle, shifttype, guestinteraction, techcomfort, certifications FROM users WHERE id = $1",
-      [userId]
+    connection = await oracledb.getConnection({
+      user: process.env.ORACLE_USER,
+      password: process.env.ORACLE_PASSWORD,
+      connectString: process.env.ORACLE_CONNECT_STRING,
+    });
+
+    const result = await connection.execute(
+      `SELECT marshacode, hotelname, location, locationtype FROM hotel`
     );
 
-    if (result.rows.length === 0) {
-      return res.status(404).json({ error: "User not found" });
-    }
-
-    res.json(result.rows[0]);
+    res.json(result.rows);
   } catch (err) {
-    console.error("Error fetching profile:", err);
-    res.status(500).json({ error: "Failed to fetch profile" });
+    console.error("Error fetching hotels:", err);
+    res.status(500).json({ error: "Failed to fetch hotels" });
+  } finally {
+    if (connection) await connection.close();
   }
 });
 

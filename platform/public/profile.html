@@ -1,225 +1,301 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Your Profile</title>
-  <link rel="stylesheet" href="styles.css" />
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f4f6f8;
-      margin: 0;
-      padding: 0;
-    }
-
-    .profile-container {
-      max-width: 500px;
-      margin: 60px auto;
-      background-color: #fff;
-      padding: 30px 40px;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
-
-    h1 {
-      text-align: center333;
-    }
-
-    label {
-      display: block;
-      margin-top: 20px;
-      font-weight: 600;
-      color: #444;
-    }
-
-    input {
-      width: 100%;
-      padding: 10px;
-      margin-top: 8px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 16px;
-    }
-
-    button {
-      margin-top: 30px;
-      width: 100%;
-      padding: 12px;
-      background-color: #0078d4;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #005fa3;
-    }
-
-    .back-button {
-      margin-top: 15px;
-      background-color: #e0e0e0;
-      color: #333;
-    }
-
-    .back-button:hover {
-      background-color: #c6c6c6;
-    }
-    select {
-  width: 100%;
-  padding: 10px;
-  margin-top: 8px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 16px;
-  background-color: #fff;
-  color: #333;
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2210%22%20height%3D%227%22%20viewBox%3D%220%200%2010%207%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cpath%20d%3D%22M0%200l5%207%205-7z%22%20fill%3D%22%23333%22/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 10px center;
-  background-size: 10px 7px;
-}
-
-select:focus {
-  border-color: #0078d4;
-  outline: none;
-  box-shadow: 0 0 0 2px rgba(0, 120, 212, 0.2);
-}
-
-  </style>
-</head>
-<body>
-  <div class="profile-container">
-    <h1 id="profile-heading">Your Profile</h1>
-    <form id="profile-form">
-      <label for="role">Your Role</label>
-      <input type="text" id="role" placeholder="e.g. Front Desk, Housekeeping" required />
-
-      <label for="experience">Years of Experience</label>
-      <input type="number" id="experience" min="0" placeholder="e.g. 3" required />
-
-      <label for="brand">Marriott Brand</label>
-      <input type="text" id="brand" placeholder="e.g. Courtyard, Ritz-Carlton" required />
-
-      <label for="location">Location</label>
-      <input type="text" id="location" placeholder="e.g. NYC, Atlanta" required />
-
-      <label for="locationType">Location Type</label>
-      <input type="text" id="locationType" placeholder="e.g. Airport, City Center, Resort, Suburb" required />
-<label for="learningStyle">Preferred Learning Style</label>
-      <select id="learningStyle">
-        <option value="">Select</option>
-        <option value="visual">Visual</option>
-        <option value="auditory">Auditory</option>
-        <option value="kinesthetic">Hands-on</option>
-        <option value="reading">Reading/Writing</option>
-      </select>
-
-      <label for="shiftType">Shift Type</label>
-      <select id="shiftType">
-        <option value="">Select</option>
-        <option value="day">Day</option>
-        <option value="night">Night</option>
-        <option value="rotating">Rotating</option>
-      </select>
-
-      <label for="guestInteraction">Guest Interaction Level</label>
-      <select id="guestInteraction">
-        <option value="">Select</option>
-        <option value="high">High</option>
-        <option value="moderate">Moderate</option>
-        <option value="low">Low</option>
-      </select>
-
-      <label for="techComfort">Technology Comfort Level</label>
-      <select id="techComfort">
-        <option value="">Select</option>
-        <option value="high">High</option>
-        <option value="moderate">Moderate</option>
-        <option value="low">Low</option>
-      </select>
-
-      <label for="certifications">Certifications or Skills</label>
-      <input type="text" id="certifications" placeholder="e.g. CPR, Opera PMS, Multilingual" />
-
-      <button type="submit">Save Profile</button>
-    </form>
-    <button class="back-button" onclick="goBack()">← Back to Dashboard</button>
-  </div>
-
-  <script>
-    const userId = sessionStorage.getItem("userId");
-
-    async function loadProfile() {
-      try {
-        const res = await fetch(`/api/profile?userId=${userId}`);
-        if (res.ok) {
-          const data = await res.json();
-          console.log("loaded profile data: ", data)
-          if (data.role || data.experience || data.brand) {
-            document.getElementById("profile-heading").textContent = "Update Your Profile";
-            document.getElementById("role").value = data.role || "";
-            document.getElementById("experience").value = data.experience || "";
-            document.getElementById("brand").value = data.brand || "";
-            document.getElementById("location").value = data.location || "";
-            document.getElementById("locationType").value = data.locationtype || "";
-            document.getElementById("learningStyle").value = data.learningstyle || "";
-            document.getElementById("shiftType").value = data.shifttype || "";
-            document.getElementById("guestInteraction").value = data.guestinteraction || "";
-            document.getElementById("techComfort").value = data.techcomfort || "";
-            document.getElementById("certifications").value = data.certifications || "";
-
-          } else {
-            document.getElementById("profile-heading").textContent = "Complete Your Profile";
-          }
-        }
-      } catch (err) {
-        console.error("Failed to load profile", err);
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Your Profile</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      body {
+        font-family: "Segoe UI", sans-serif;
+        background-color: #f4f6f8;
+        margin: 0;
+        padding: 0;
       }
-    }
 
-    document.getElementById("profile-form").addEventListener("submit", async function(e) {
-      e.preventDefault();
-      const role = document.getElementById("role").value;
-      const experience = document.getElementById("experience").value;
-      const brand = document.getElementById("brand").value;
-      const location = document.getElementById("location").value;
-      const locationType = document.getElementById("locationType").value;
-      const learningStyle = document.getElementById("learningStyle").value;
-      const shiftType = document.getElementById("shiftType").value;
-      const guestInteraction = document.getElementById("guestInteraction").value;
-      const techComfort = document.getElementById("techComfort").value;
-      const certifications = document.getElementById("certifications").value;
+      .profile-container {
+        max-width: 500px;
+        margin: 60px auto;
+        background-color: #fff;
+        padding: 30px 40px;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
 
-      try {
-        const res = await fetch("/api/profile", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ userId, role, experience, brand, location, locationType, learningStyle, shiftType, guestInteraction, techComfort, certifications }),
+      h1 {
+        text-align: center333;
+      }
+
+      label {
+        display: block;
+        margin-top: 20px;
+        font-weight: 600;
+        color: #444;
+      }
+
+      input {
+        width: 100%;
+        padding: 10px;
+        margin-top: 8px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 16px;
+      }
+
+      button {
+        margin-top: 30px;
+        width: 100%;
+        padding: 12px;
+        background-color: #0078d4;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background-color: #005fa3;
+      }
+
+      .back-button {
+        margin-top: 15px;
+        background-color: #e0e0e0;
+        color: #333;
+      }
+
+      .back-button:hover {
+        background-color: #c6c6c6;
+      }
+      select {
+        width: 100%;
+        padding: 10px;
+        margin-top: 8px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 16px;
+        background-color: #fff;
+        color: #333;
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2210%22%20height%3D%227%22%20viewBox%3D%220%200%2010%207%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cpath%20d%3D%22M0%200l5%207%205-7z%22%20fill%3D%22%23333%22/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 10px center;
+        background-size: 10px 7px;
+      }
+
+      select:focus {
+        border-color: #0078d4;
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(0, 120, 212, 0.2);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="profile-container">
+      <h1 id="profile-heading">Your Profile</h1>
+      <form id="profile-form">
+        <label for="role">Your Role</label>
+        <input
+          type="text"
+          id="role"
+          placeholder="e.g. Front Desk, Housekeeping"
+          required
+        />
+
+        <label for="experience">Years of Experience</label>
+        <input
+          type="number"
+          id="experience"
+          min="0"
+          placeholder="e.g. 3"
+          required
+        />
+
+        <label for="brand">Marriott Brand</label>
+        <input
+          type="text"
+          id="brand"
+          placeholder="e.g. Courtyard, Ritz-Carlton"
+          required
+        />
+
+        <label for="marshaCode">Hotel (Marsha Code)</label>
+        <select id="marshaCode" required></select>
+
+        <label for="location">Location</label>
+        <input type="text" id="location" readonly />
+
+        <label for="locationType">Location Type</label>
+        <input type="text" id="locationType" readonly />
+
+        <label for="learningStyle">Preferred Learning Style</label>
+        <select id="learningStyle">
+          <option value="">Select</option>
+          <option value="visual">Visual</option>
+          <option value="auditory">Auditory</option>
+          <option value="kinesthetic">Hands-on</option>
+          <option value="reading">Reading/Writing</option>
+        </select>
+
+        <label for="shiftType">Shift Type</label>
+        <select id="shiftType">
+          <option value="">Select</option>
+          <option value="day">Day</option>
+          <option value="night">Night</option>
+          <option value="rotating">Rotating</option>
+        </select>
+
+        <label for="guestInteraction">Guest Interaction Level</label>
+        <select id="guestInteraction">
+          <option value="">Select</option>
+          <option value="high">High</option>
+          <option value="moderate">Moderate</option>
+          <option value="low">Low</option>
+        </select>
+
+        <label for="techComfort">Technology Comfort Level</label>
+        <select id="techComfort">
+          <option value="">Select</option>
+          <option value="high">High</option>
+          <option value="moderate">Moderate</option>
+          <option value="low">Low</option>
+        </select>
+
+        <label for="certifications">Certifications or Skills</label>
+        <input
+          type="text"
+          id="certifications"
+          placeholder="e.g. CPR, Opera PMS, Multilingual"
+        />
+
+        <button type="submit">Save Profile</button>
+      </form>
+      <button class="back-button" onclick="goBack()">
+        ← Back to Dashboard
+      </button>
+    </div>
+
+    <script>
+      async function loadHotels() {
+        try {
+          const res = await fetch("/api/hotels");
+          const hotels = await res.json();
+          const select = document.getElementById("marshaCode");
+
+          hotels.forEach((hotel) => {
+            const option = document.createElement("option");
+            option.value = hotel.marshacode;
+            option.textContent = `${hotel.marshacode} - ${hotel.hotelname}`;
+            option.dataset.location = hotel.location;
+            option.dataset.locationtype = hotel.locationtype;
+            select.appendChild(option);
+          });
+
+          select.addEventListener("change", function () {
+            const selected = select.options[select.selectedIndex];
+            document.getElementById("location").value =
+              selected.dataset.location || "";
+            document.getElementById("locationType").value =
+              selected.dataset.locationtype || "";
+          });
+        } catch (err) {
+          console.error("Failed to load hotels:", err);
+        }
+      }
+
+      loadHotels();
+      const userId = sessionStorage.getItem("userId");
+
+      async function loadProfile() {
+        try {
+          const res = await fetch(`/api/profile?userId=${userId}`);
+          if (res.ok) {
+            const data = await res.json();
+            console.log("loaded profile data: ", data);
+            if (data.role || data.experience || data.brand) {
+              document.getElementById("profile-heading").textContent =
+                "Update Your Profile";
+              document.getElementById("role").value = data.role || "";
+              document.getElementById("experience").value =
+                data.experience || "";
+              document.getElementById("brand").value = data.brand || "";
+              document.getElementById("location").value = data.location || "";
+              document.getElementById("locationType").value =
+                data.locationtype || "";
+              document.getElementById("learningStyle").value =
+                data.learningstyle || "";
+              document.getElementById("shiftType").value = data.shifttype || "";
+              document.getElementById("guestInteraction").value =
+                data.guestinteraction || "";
+              document.getElementById("techComfort").value =
+                data.techcomfort || "";
+              document.getElementById("certifications").value =
+                data.certifications || "";
+            } else {
+              document.getElementById("profile-heading").textContent =
+                "Complete Your Profile";
+            }
+          }
+        } catch (err) {
+          console.error("Failed to load profile", err);
+        }
+      }
+
+      document
+        .getElementById("profile-form")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+          const role = document.getElementById("role").value;
+          const experience = document.getElementById("experience").value;
+          const brand = document.getElementById("brand").value;
+          const location = document.getElementById("location").value;
+          const locationType = document.getElementById("locationType").value;
+          const learningStyle = document.getElementById("learningStyle").value;
+          const shiftType = document.getElementById("shiftType").value;
+          const guestInteraction =
+            document.getElementById("guestInteraction").value;
+          const techComfort = document.getElementById("techComfort").value;
+          const certifications =
+            document.getElementById("certifications").value;
+
+          try {
+            const res = await fetch("/api/profile", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                userId,
+                role,
+                experience,
+                brand,
+                location,
+                locationType,
+                learningStyle,
+                shiftType,
+                guestInteraction,
+                techComfort,
+                certifications,
+              }),
+            });
+
+            if (res.ok) {
+              alert("Profile saved successfully!");
+              window.location.href = "index.html";
+            } else {
+              alert("Failed to save profile.");
+            }
+          } catch (err) {
+            console.error("Profile save failed", err);
+            alert("An error occurred while saving your profile.");
+          }
         });
 
-        if (res.ok) {
-          alert("Profile saved successfully!");
-          window.location.href = "index.html";
-        } else {
-          alert("Failed to save profile.");
-        }
-      } catch (err) {
-        console.error("Profile save failed", err);
-        alert("An error occurred while saving your profile.");
+      function goBack() {
+        window.location.href = "index.html";
       }
-    });
 
-    function goBack() {
-      window.location.href = "index.html";
-    }
-
-    loadProfile();
-  </script>
-</body>
+      loadProfile();
+    </script>
+  </body>
 </html>
