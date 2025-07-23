@@ -29,12 +29,13 @@ app.get(`/generate-content`, async (req, res) => {
     );
     return res.json({ content: cache[topic], quizId });
   }
-  const userProfile = await pool.query("SELECT role, experience, brand FROM users WHERE id = $1", [userId]);
-  const {role, experience, brand} = userProfile.rows[0];
+  const userProfile = await pool.query("SELECT role, experience, brand, learningstyle, shifttype, guestinteraction, techcomfort, certifications FROM users WHERE id = $1", [userId]);
+  const {role, experience, brand, location, locationType, shiftType, learningStyle, guestInteraction, techComfort, certifications} = userProfile.rows[0];
 
   try {
     const prompt = `Generate a training module for Marriott hotel staff on the topic: "${topic}". 
-    The person is in the role of ${role} with ${experience} years of experience and is working at a ${brand} Marriott hotel. 
+    The person is in the role of ${role} with ${experience} years of experience and is working at a ${brand} Marriott hotel. The hotel is located in ${location} and the hotel type is a/an ${locationType}.
+    This associate has a ${shiftType} shift and prefers a ${learningStyle} learning Style. Their role has a ${guestInteraction} level of guest interaction. Their comfort with tech is ${techComfort} and they have the following certifications: ${certifications}.
     Ensure that the content is tailored to the user personally based on their information. Focus on preparing staff for
     unique, real, human interactions because right now most staff find the current training unhelpful in preparing them for authentic, guest-facing situations. 
     Include:
@@ -52,6 +53,7 @@ app.get(`/generate-content`, async (req, res) => {
     }
     Only the quiz should be in json. the rest should be formatted in markdown. Know that the content you generate goes directly to the website, so do not add messages like "Certainly!" or "Let me know if you need anything else"`;
     //const prompt2 = "test prompt, return one sentence";
+    console.log("Prompt: ", prompt);
     const response = await client.responses.create({
       model: "gpt-4.1-mini",
       input: prompt,
@@ -238,16 +240,16 @@ app.post("/log-time", async (req, res) => {
 });
 
 app.post("/api/profile", async (req, res) => {
-  const { userId, role, experience, brand } = req.body;
+  const { userId, role, experience, brand, location, locationType, learningStyle, shiftType, guestInteraction, techComfort, certifications} = req.body;
 
-  if (!userId || !role || !experience || !brand) {
+  if (!userId || !role || !experience || !brand || !location || !locationType) {
     return res.status(400).json({ error: "Missing profile information" });
   }
 
   try {
     await pool.query(
-      "UPDATE users SET role = $1, experience = $2, brand = $3 WHERE id = $4",
-      [role, experience, brand, userId]
+      "UPDATE users SET role = $1, experience = $2, brand = $3, location = $4, locationtype=$5, learningstyle = $6, shifttype = $7, guestinteraction = $8, techcomfort = $9, certifications = $10 WHERE id = $11",
+      [role, experience, brand, location, locationType, learningStyle, shiftType, guestInteraction, techComfort, certifications, userId]
     );
     res.status(200).json({ message: "Profile updated successfully" });
   } catch (err) {
@@ -265,7 +267,7 @@ app.get("/api/profile", async (req, res) => {
 
   try {
     const result = await pool.query(
-      "SELECT role, experience, brand FROM users WHERE id = $1",
+      "SELECT role, experience, brand, location, locationtype, learningstyle, shifttype, guestinteraction, techcomfort, certifications FROM users WHERE id = $1",
       [userId]
     );
 
