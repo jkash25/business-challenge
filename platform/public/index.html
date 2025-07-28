@@ -37,7 +37,7 @@
 
   <body>
     
-    <script src="navbar.js"></script>
+    <script src="navbar/navbar.js"></script>
     <main class="dashboard">
       <section class="greeting-section">
         <h1 id="greeting">Good morning!</h1>
@@ -116,7 +116,7 @@
   const user = sessionStorage.getItem("user");
 
   if (!user) {
-    window.location.href = "login.html";
+    window.location.href = "auth/login.html";
   } else {
     // Update profile icon
     const profileIcon = document.querySelector(".profile-icon");
@@ -139,12 +139,14 @@
       const completed = JSON.parse(localStorage.getItem(completedKey) || "{}");
       const cards = document.querySelectorAll(".activity-card");
       let completedCount = 0;
+      const normalize = (str) => str.trim().toLowerCase();
+
 
       cards.forEach((card) => {
         const title = card.querySelector("h3").textContent.trim();
         console.log("current card title: ", title);
         console.log("comparing against stored keys: ", Object.keys(completed));
-        if (completed[title]) {
+        if (completed[normalize(title)]) {
           completedCount++;
 
           const headerContainer = document.createElement("div");
@@ -176,7 +178,7 @@
       document.querySelector(".progress-fill").style.width = `${percent}%`;
   function logout() {
     localStorage.removeItem("user");
-    window.location.href = "login.html";
+    window.location.href = "auth/login.html";
   }
 </script>
 

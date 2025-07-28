@@ -20,7 +20,7 @@ const quizzes = {};
 app.get(`/generate-content`, async (req, res) => {
   const topic = req.query.topic;
   const userId = req.query.userId;
-  console.log("The topic is: " + topic);
+  //console.log("The topic is: " + topic);
   if (!topic) return res.status(400).json({ error: "Missing topic" });
 
   if (cache[topic]) {
@@ -29,13 +29,13 @@ app.get(`/generate-content`, async (req, res) => {
     );
     return res.json({ content: cache[topic], quizId });
   }
-  const userProfile = await pool.query("SELECT role, experience, brand, learningstyle, shifttype, guestinteraction, techcomfort, certifications FROM users WHERE id = $1", [userId]);
-  const {role, experience, brand, location, locationType, shiftType, learningStyle, guestInteraction, techComfort, certifications} = userProfile.rows[0];
+  const userProfile = await pool.query("SELECT role, experience, brand, learningstyle, shifttype, guestinteraction, techcomfort, certifications, location, locationtype FROM users WHERE id = $1", [userId]);
+  const {role, experience, brand, learningstyle, shifttype, guestinteraction, techcomfort, certifications, location, locationtype} = userProfile.rows[0];
 
   try {
     const prompt = `Generate a training module for Marriott hotel staff on the topic: "${topic}". 
-    The person is in the role of ${role} with ${experience} years of experience and is working at a ${brand} Marriott hotel. The hotel is located in ${location} and the hotel type is a/an ${locationType}.
-    This associate has a ${shiftType} shift and prefers a ${learningStyle} learning Style. Their role has a ${guestInteraction} level of guest interaction. Their comfort with tech is ${techComfort} and they have the following certifications: ${certifications}.
+    The person is in the role of ${role} with ${experience} years of experience and is working at a ${brand} Marriott hotel. The hotel is located in ${location} and the hotel type is a/an ${locationtype}.
+    This associate has a ${shifttype} shift and prefers a ${learningstyle} learning Style. Their role has a ${guestinteraction} level of guest interaction. Their comfort with tech is ${techcomfort} and they have the following certifications: ${certifications}.
     Ensure that the content is tailored to the user personally based on their information. Focus on preparing staff for
     unique, real, human interactions because right now most staff find the current training unhelpful in preparing them for authentic, guest-facing situations. 
     Include:
@@ -53,7 +53,7 @@ app.get(`/generate-content`, async (req, res) => {
     }
     Only the quiz should be in json. the rest should be formatted in markdown. Know that the content you generate goes directly to the website, so do not add messages like "Certainly!" or "Let me know if you need anything else"`;
     //const prompt2 = "test prompt, return one sentence";
-    console.log("Prompt: ", prompt);
+    //console.log("Prompt: ", prompt);
     const response = await client.responses.create({
       model: "gpt-4.1-mini",
       input: prompt,
@@ -95,7 +95,7 @@ app.get(`/quiz/:id`, (req, res) => {
 app.use(express.json());
 app.post("/api/signup", async (req, res) => {
   const { name, email, password } = req.body;
-  console.log("user password is : ", password);
+  //console.log("user password is : ", password);
   try {
     const existing = await pool.query("SELECT * FROM users WHERE email = $1", [
       email,
@@ -162,7 +162,7 @@ app.post("/api/login", async (req, res) => {
     );
 
     res.json({ userId, name: user.rows[0].name, isAdmin: user.rows[0].is_admin });
-    console.log("Login successful for: ", email);
+    //console.log("Login successful for: ", email);
   } catch (err) {
     console.error("Login error:", err);
     res.status(500).json({ error: "Login failed" });

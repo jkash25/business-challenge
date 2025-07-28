@@ -1,6 +1,6 @@
 // navbar.js
 document.addEventListener("DOMContentLoaded", async () => {
-  const response = await fetch("/navbar.html");
+  const response = await fetch("/navbar/navbar.html");
   const html = await response.text();
   document.body.insertAdjacentHTML("afterbegin", html);
 

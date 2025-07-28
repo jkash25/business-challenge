@@ -1,5 +1,5 @@
 let quizStartTime;
-
+const normalize = (str) => str.trim().toLowerCase();
 document.addEventListener("DOMContentLoaded", async () => {
   quizStartTime = Date.now();
   const quizId = sessionStorage.getItem("quizId");
@@ -85,13 +85,23 @@ async function submitQuiz() {
     document.querySelector("button").disabled = true;
     const topic = sessionStorage.getItem("topicTitle");
     console.log("Marking activity as completed for topic:", topic);
-    console.log("Before saving:, ", localStorage.getItem("completedActivities"));
+    console.log(
+      "Before saving:, ",
+      localStorage.getItem("completedActivities")
+    );
     if (topic) {
       const user = sessionStorage.getItem("user");
       const completedKey = `completedActivities_${user}`;
       let completed = JSON.parse(localStorage.getItem(completedKey) || "{}");
-      completed[topic] = true;
+      console.log("topic quiz.js: ", topic);
+      console.log("topic normalized quiz.js: ", normalize(topic));
+      completed[normalize(topic)] = true;
       localStorage.setItem(completedKey, JSON.stringify(completed));
+      console.log("Final saved key:", normalize(topic));
+      console.log(
+        "localStorage[completedActivities_USER]:",
+        localStorage.getItem(completedKey)
+      );
     }
     setTimeout(() => {
       window.location.href = "quizconfirmation.html";

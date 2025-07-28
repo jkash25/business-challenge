@@ -10,9 +10,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const contentEl = document.getElementById("topic-content");
   const loadingEl = document.getElementById("loading");
 
+
   if (topic) {
     titleEl.textContent = topic;
-    sessionStorage.setItem("topicTitle", topic);
+    const normalize = (str) => str.trim().toLowerCase();
+    sessionStorage.setItem("topicTitle", normalize(topic));
+    // sessionStorage.setItem("topicTitle", topic);
     fetchContent(topic);
   } else {
     titleEl.textContent = "No topic provided.";
