@@ -7,14 +7,35 @@ const BASE_URL = "http://localhost:3000";
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const getRandom = (arr) => arr[Math.floor(Math.random() * arr.length)];
 const getRandomCertifications = () => {
-  const certs = ["CPR", "Safety Training", "Hospitality Basics", "Fire Safety", "None"];
-  return certs.sort(() => 0.5 - Math.random()).slice(0, Math.floor(Math.random() * 3) + 1).join(", ");
+  const certs = [
+    "CPR",
+    "Safety Training",
+    "Hospitality Basics",
+    "Fire Safety",
+    "None",
+  ];
+  return certs
+    .sort(() => 0.5 - Math.random())
+    .slice(0, Math.floor(Math.random() * 3) + 1)
+    .join(", ");
 };
 
 // Profile options
-const roles = ["Front Desk Agent", "Housekeeper", "Concierge", "Manager", "Server"];
+const roles = [
+  "Front Desk Agent",
+  "Housekeeper",
+  "Concierge",
+  "Manager",
+  "Server",
+];
 const brands = ["Marriott", "Ritz-Carlton", "Sheraton", "Westin", "Courtyard"];
-const locations = ["Bethesda, MD", "New York, NY", "Miami, FL", "Chicago, IL", "Seattle, WA"];
+const locations = [
+  "Bethesda, MD",
+  "New York, NY",
+  "Miami, FL",
+  "Chicago, IL",
+  "Seattle, WA",
+];
 const locationTypes = ["Urban", "Suburban", "Resort", "Airport"];
 const learningStyles = ["Visual", "Auditory", "Kinesthetic"];
 const shiftTypes = ["Morning", "Evening", "Night"];
@@ -36,7 +57,11 @@ async function simulateUser(index) {
 
   try {
     // 1. Sign up
-    const signupRes = await axios.post(`${BASE_URL}/api/signup`, { name, email, password });
+    const signupRes = await axios.post(`${BASE_URL}/api/signup`, {
+      name,
+      email,
+      password,
+    });
     const userId = signupRes.data.userId;
 
     // 2. Log in
@@ -59,7 +84,9 @@ async function simulateUser(index) {
     await axios.post(`${BASE_URL}/api/profile`, profile);
 
     // 4. Simulate topic interaction
-    const selectedTopics = topics.sort(() => 0.5 - Math.random()).slice(0, 2 + Math.floor(Math.random() * 2));
+    const selectedTopics = topics
+      .sort(() => 0.5 - Math.random())
+      .slice(0, 2 + Math.floor(Math.random() * 2));
 
     for (const topic of selectedTopics) {
       const contentRes = await axios.get(`${BASE_URL}/generate-content`, {
@@ -103,9 +130,21 @@ async function simulateUser(index) {
       });
     }
 
-    console.log(`✅ Simulated user ${index + 1}`);
+    console.log(`Simulated user ${index + 1}`);
   } catch (err) {
-    console.error(`❌ Error for user ${index + 1}:`, err.response?.data || err.message);
+    if (err.response) {
+      console.error(` Error for user ${index + 1}:`, {
+        status: err.response.status,
+        data: err.response.data,
+      });
+    } else if (err.request) {
+      console.error(
+        ` Error for user ${index + 1}: No response received`,
+        err.request
+      );
+    } else {
+      console.error(` Error for user ${index + 1}:`, err.message);
+    }
   }
 }
 
