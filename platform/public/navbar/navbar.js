@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   window.logout = () => {
     sessionStorage.clear();
-    window.location.href = "/login.html";
+    window.location.href = "/auth/login.html";
   };
 
   window.addEventListener("click", function (e) {
